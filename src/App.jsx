@@ -1066,7 +1066,8 @@ function Contact() {
               }}
             >
               Encontre o <br />
-              <span style={{ color: "#C8102E" }}>imóvel ideal</span><br />
+              <span style={{ color: "#C8102E" }}>imóvel ideal</span>
+              <br />
               para o seu cliente!
             </h2>
             <p
@@ -1079,7 +1080,9 @@ function Contact() {
                 maxWidth: 420,
               }}
             >
-              Preencha o formulário ao lado ou chame pelo Whatsapp, entrarei em contato o mais breve possível para entender suas necessidades e apresentar  as melhores opções.
+              Preencha o formulário ao lado ou chame pelo Whatsapp, entrarei em
+              contato o mais breve possível para entender suas necessidades e
+              apresentar as melhores opções.
             </p>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
@@ -1249,13 +1252,13 @@ function Contact() {
                         onChange={(e) => {
                           // Pega o valor e remove tudo que não for número
                           let v = e.target.value.replace(/\D/g, "");
-                          
+
                           // Aplica a máscara se tiver até 11 números
                           if (v.length <= 11) {
                             v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
                             v = v.replace(/(\d)(\d{4})$/, "$1-$2");
                           }
-                          
+
                           setForm({ ...form, phone: v });
                         }}
                         maxLength={15} // Limita o tamanho máximo para (XX) XXXXX-XXXX
@@ -1431,7 +1434,7 @@ function Footer({ scrollTo }) {
                     textTransform: "uppercase",
                   }}
                 >
-                  Corretora de Imóveis
+                  Cordenadora de Parcerias
                 </div>
               </div>
             </div>
@@ -1495,7 +1498,7 @@ function Footer({ scrollTo }) {
                 { label: "Início", id: "inicio" },
                 { label: "Sobre", id: "sobre" },
                 { label: "Empreendimentos", id: "imoveis" }, // Ajustei o ID para "imoveis" que é o da section
-                { label: "Contato", id: "contato" }
+                { label: "Contato", id: "contato" },
               ].map((link) => (
                 <div
                   key={link.id}
@@ -1642,7 +1645,11 @@ export default function App() {
       <About />
       <Properties />
       <Contact />
-      <Footer scrollTo={(id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })} />
+      <Footer
+        scrollTo={(id) =>
+          document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+        }
+      />
     </div>
   );
 }
