@@ -83,6 +83,7 @@ function AnimatedSection({ children, delay = 0, className = "" }) {
 
 function Navbar({ activeSection }) {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60);
@@ -98,6 +99,7 @@ function Navbar({ activeSection }) {
   ];
 
   const scrollTo = (id) => {
+    setMobileMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -109,24 +111,24 @@ function Navbar({ activeSection }) {
         left: 0,
         right: 0,
         zIndex: 1000,
-        background: scrolled ? "rgba(255,255,255,0.97)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(0,0,0,0.06)" : "none",
+        background:
+          scrolled || mobileMenuOpen ? "rgba(255,255,255,0.97)" : "transparent",
+        backdropFilter: scrolled || mobileMenuOpen ? "blur(20px)" : "none",
+        borderBottom:
+          scrolled || mobileMenuOpen ? "1px solid rgba(0,0,0,0.06)" : "none",
         transition: "all 0.4s ease",
-        padding: scrolled ? "14px 0" : "22px 0",
+        padding: "16px 0",
       }}
     >
       <div
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "16px 24px",
+          padding: "0 24px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          minHeight: "80px",
-          flexWrap: "wrap",
-          gap: 16,
+          height: "48px",
         }}
       >
         <div
@@ -134,6 +136,7 @@ function Navbar({ activeSection }) {
             display: "flex",
             alignItems: "center",
             cursor: "pointer",
+            height: "100%",
           }}
           onClick={() => scrollTo("inicio")}
         >
@@ -141,7 +144,8 @@ function Navbar({ activeSection }) {
             src={logo}
             alt="Roberta Mancini"
             style={{
-              height: scrolled ? "240px" : "300px",
+              height: scrolled || mobileMenuOpen ? "140px" : "180px",
+              maxHeight: "50px",
               width: "auto",
               display: "block",
               objectFit: "contain",
@@ -150,14 +154,37 @@ function Navbar({ activeSection }) {
           />
         </div>
 
-        <div
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           style={{
-            display: "flex",
-            gap: 24,
-            alignItems: "center",
-            flexWrap: "wrap",
-            justifyContent: "center",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: "8px",
+            display: "none",
           }}
+        >
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={scrolled || mobileMenuOpen ? "#1a1a1a" : "#fff"}
+            strokeWidth="2"
+            strokeLinecap="round"
+          >
+            {mobileMenuOpen ? (
+              <path d="M18 6L6 18M6 6l12 12" />
+            ) : (
+              <path d="M3 12h18M3 6h18M3 18h18" />
+            )}
+          </svg>
+        </button>
+
+        <div
+          className="desktop-menu"
+          style={{ display: "flex", gap: 36, alignItems: "center" }}
         >
           {links.map((l) => (
             <button
@@ -183,6 +210,55 @@ function Navbar({ activeSection }) {
                     ? "2px solid #C8102E"
                     : "2px solid transparent",
                 transition: "all 0.3s",
+                fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
+              }}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "100%",
+          left: 0,
+          right: 0,
+          background: "rgba(255,255,255,0.98)",
+          borderBottom: "1px solid rgba(0,0,0,0.06)",
+          padding: "0 24px",
+          display: "flex",
+          flexDirection: "column",
+          maxHeight: mobileMenuOpen ? "300px" : "0",
+          overflow: "hidden",
+          transition: "max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+          boxShadow: mobileMenuOpen ? "0 10px 20px rgba(0,0,0,0.05)" : "none",
+        }}
+      >
+        <div
+          style={{
+            padding: "20px 0",
+            display: "flex",
+            flexDirection: "column",
+            gap: 20,
+          }}
+        >
+          {links.map((l) => (
+            <button
+              key={l.id}
+              onClick={() => scrollTo(l.id)}
+              style={{
+                background: "none",
+                border: "none",
+                textAlign: "left",
+                fontSize: 12,
+                letterSpacing: 2,
+                textTransform: "uppercase",
+                fontWeight: 600,
+                color: activeSection === l.id ? "#C8102E" : "#555",
+                padding: "8px 0",
+                borderBottom: "1px solid #f0f0f0",
                 fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
               }}
             >
@@ -1625,6 +1701,15 @@ export default function App() {
       @keyframes float { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
       input::placeholder, textarea::placeholder { color: #ccc; font-weight: 300; }
       select option { font-family: 'DM Sans', sans-serif; }
+      
+      /* Novas regras para o menu Mobile */
+      @media (max-width: 850px) {
+        .desktop-menu { display: none !important; }
+        .mobile-menu-btn { display: block !important; }
+      }
+      @media (min-width: 851px) {
+        .mobile-menu-btn { display: none !important; }
+      }
     `;
     document.head.appendChild(style);
 
