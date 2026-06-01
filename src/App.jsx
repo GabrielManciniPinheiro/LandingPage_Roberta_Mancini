@@ -1520,7 +1520,7 @@ function Footer({ scrollTo }) {
                     textTransform: "uppercase",
                   }}
                 >
-                  Cordenadora de Parcerias
+                  Gerente de Parcerias
                 </div>
               </div>
             </div>
